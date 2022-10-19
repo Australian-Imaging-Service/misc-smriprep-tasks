@@ -41,34 +41,16 @@ from pydra.engine.specs import (
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~??????many
 @mark.task
-@mark.annotate({"return": {"": }}) #???
-def CopyXForm(hdr_file: File): #can I use DynamicTraitedSpec?
-    for f in SimpleInterface._fields: #self._fields?????
-        in_files = getattr(SimpleInterface.inputs, f)
-        f = []
-        if isinstance(in_files, str):
-            in_files = [in_files]
-        for in_file in in_files:
-            out_name = fname_presuffix(
-                in_file, suffix="_xform", newpath=os.getcwd()
-            ) #newpath=runtime.cwd???
-            # Copy and replace header
-            shutil.copy(in_file, out_name)
-            _copyxform(
-                hdr_file,
-                out_name,
-                message="CopyXForm (niworkflows v%s)" % __version__,
-            )
-            f.append(out_name)
+@mark.annotate({"return": {"output": File}}) #???
+def CopyXForm(hdr_file: File, in_file: File, out_file: str): #can I use DynamicTraitedSpec?
+    shutil.copy(in_file, out_file)
+    _copyxform(
+        hdr_file,
+        out_file,
+        message="CopyXForm (niworkflows v%s)" % __version__,
+    )
+    return out_file
 
-        # Flatten out one-element lists
-        if len(f) == 1:
-            f = f[0]
-
-    default = self._results.pop("in_file", None) ###?default = self._results.pop("in_file", None)
-    if default:
-        out_file = default
-    return runtime #####?????????
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~?
 
