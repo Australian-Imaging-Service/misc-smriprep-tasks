@@ -128,7 +128,7 @@ def inject_skullstripped(subjects_dir, subject_id, skullstripped):
 
 @mark.task
 @mark.annotate({"return": {"": }})
-def MakeMidthickness(graymid:Path): #InputMultiPath as Path?
+def MakeMidthickness(graymid: Path or ty.List[Path]): #InputMultiPath as Path?--or List[Path]
     """
     Variation on MRIsExpand that checks for an existing midthickness/graymid surface.
 
